@@ -1,7 +1,12 @@
 #!/usr/bin/python
 #
 # WSGI module to scrape III records and return them as JSON
-# Supports REST syntax, as in /isbn/1412936373
+# Supports REST syntax, as in 
+#
+#    /isbn/1412936373
+#    /oclc/ocm61881193
+#    /bibrecord/2275560
+#    /title/freakonomics
 #
 # Supported query parameters are:
 #
@@ -87,7 +92,8 @@ def validateIII(marc, sterm):
 
         term = sterm[1:].lower()
         if sterm.startswith('i'):
-            return OrList([ f['sf']['a'][0].lower().startswith(term) for f in marc['020']]) \
+            return OrList([ f['sf']['a'][0].lower().startswith(term) \
+                            for f in marc['020']]) \
                 or OrList([ f['sf']['a'][0].lower().replace("-", "").startswith(term) \
                             for f in marc['022']])
 
@@ -115,12 +121,11 @@ def fetch(sterm, params):
     if marc and validateIII(marc['marc'], sterm):
         marcrecords.append(marc)
 
-    results = { 
+    return { 
         'results' : marcrecords, 
         'searchterm' : sterm,
         'recordurl' : recordurl
     }
-    return results
 
 def notfound(env, start_response):
     body = "Not Found, env = \n" \
@@ -138,6 +143,7 @@ def notfound(env, start_response):
     return [body]
 
 pathinfoformat = re.compile('/([^/]*)/(.*)')
+
 def application(env, start_response):
     params = dict([(urllib.unquote_plus(k), urllib.unquote_plus(v))
         for k, v in [kv.strip().split('=', 1) \

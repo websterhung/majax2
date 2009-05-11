@@ -42,13 +42,6 @@ if (!majax2ServiceUrl)
 if (!majax2OpacBase)
     var majax2OpacBase = "http://addison.vt.edu/search";
 
-// majax2OpacBase = "http://library.naperville-lib.org/search";
-// majax2OpacBase = "http://library.ccbcmd.edu/search";
-// majax2OpacBase = "http://library.tufts.edu/search";
-// majax2OpacBase = "http://laurel.lib.vt.edu/search";
-// majax2OpacBase = "http://www.library.lafayette.edu/search";
-// majax2OpacBase = "http://catalogue.wellcome.ac.uk:2082/search";
-
 /*****************************************************************/
 /* A regular expression that is matched against a status to determine if
  * an item should count as available.
@@ -155,6 +148,16 @@ var EventCache = function(){
 addEvent(window,'unload',EventCache.flush);
 // end of rock-solid addEvent
 
+// Begin MAJAX code
+
+// majax2OpacBase = "http://library.naperville-lib.org/search";
+// majax2OpacBase = "http://library.ccbcmd.edu/search";
+// majax2OpacBase = "http://library.tufts.edu/search";
+// majax2OpacBase = "http://laurel.lib.vt.edu/search";
+// majax2OpacBase = "http://www.library.lafayette.edu/search";
+// majax2OpacBase = "http://catalogue.wellcome.ac.uk:2082/search";
+
+/* Global majax object */
 majax = {
     isReady: false,
     readyListeners: [ ],
@@ -174,8 +177,6 @@ majax = {
 String.prototype.trim = function() { 
     return this.replace(/^\s+|\s+$/g, ''); 
 };
-
-// Begin MAJAX code
 
 function majaxProcessRemainingSpans(spanElems) {
     var requestsSentToServer = 0;
@@ -690,22 +691,17 @@ function majaxSearch(sterm, majaxRequest)
 
 majax.processResults = function (data) 
 {
-    function notifyPendingOnSuccess(jsondata) {
-        for (var i = 0; i < pending.length; i++) {
-            pending[i].onsuccess(jsondata);
-        }
-    }
-
-    // request completed.  Record status in cache.
-    // if successful, also record result in cache.
-    // notify all pending requests and clear pending
-    // queue for this search term.
-    var sterm = data.searchterm;
-    var pending = majaxPending[sterm];
-    majaxCache[sterm] = { data: data };
-
+    // 
+    // Convert majax2 data into majax1 form to avoid changes to rest of code
+    //
     // majax2 JSON result is different from majax1 representation; 
-    // convert majax2 data into majax1 form to avoid changes to rest of code
+    // It does not contain the 'fXXX' shortcuts, and it doesn't have the
+    // fXXX.a shortcuts for the first subfield occurrence. (These are
+    // aliases that cannot be expressed in JSON.)
+    //
+    // In addition, to keep bandwidth down, shorter fieldnames were
+    // used.
+    // 
     for (var i = 0; i < data.results.length; i++) {
         var marc = data.results[i].marc;
         var marc2 = { };
@@ -744,7 +740,17 @@ majax.processResults = function (data)
         addLegacyMethodsToResult(data.results[i]);
     }
 
-    notifyPendingOnSuccess(data);
+    // request completed.  Record status in cache.
+    // if successful, also record result in cache.
+    // notify all pending requests and clear pending
+    // queue for this search term.
+    var sterm = data.searchterm;
+    majaxCache[sterm] = { data: data };
+
+    var pending = majaxPending[sterm];
+    for (var i = 0; i < pending.length; i++) {
+        pending[i].onsuccess(data);
+    }
     delete majaxPending[sterm];
 }
 
