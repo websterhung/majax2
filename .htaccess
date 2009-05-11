@@ -1,0 +1,16 @@
+Options +ExecCGI
+
+# taken from http://webpy.infogami.com/install
+<IfModule mod_rewrite.c>
+  RewriteEngine on
+  RewriteBase /services/majax2/
+  RewriteRule ^((isbn|oclc|bibrecord|title)/.*)$ majax2.py/$1 [PT]
+</IfModule>
+
+<Files majax2.py>
+    SetHandler wsgi-script
+</Files>
+
+<FilesMatch "\.(js|xml)$">
+Header set Cache-Control "max-age=1,must-revalidate"
+</FilesMatch>
