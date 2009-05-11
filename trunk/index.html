@@ -1,0 +1,295 @@
+<html>
+<head>
+<title>Majax 2.0 Demo</title>
+
+<script type="text/javascript">
+/* adjust these variables */
+var majax2ServiceUrl = "http://libx.lib.vt.edu/services/majax2/";
+var majax2OpacBase = "http://addison.vt.edu/search";
+</script>
+<script type="text/javascript" src="majax2.js"></script>
+
+<style type="text/css">
+/* example of how to style existing majax classes */
+.boldred {
+    font-weight: bold;
+    color: red;
+}
+.majax-endnote-style {
+        border-style: groove;
+        background: lightgreen;
+        text-align: left;
+}
+/* example of how to add a custom style */
+.showitalic {
+    font-style: italic;
+}
+</style>
+</head>
+
+<body>
+<h2>MAJAX 2.0 Feature Demo</h2>
+<tt>$Id$</tt>
+
+<p>
+To use MAJAX 2, include in your webpage this:
+</p>
+<pre>
+&lt;script type="text/javascript"&gt;
+// You are free to use our service for testing, but there is no
+// guarantee it will be always available
+var majax2ServiceUrl = "http://libx.lib.vt.edu/services/majax2/";
+
+// Point this at your catalog.  
+// It should work with any III system.
+var majax2OpacBase = "http://addison.vt.edu/search";
+&lt;/script&gt;
+&lt;script type="text/javascript" src="majax2.js"&gt;&lt;/script&gt;
+</pre>
+
+<p>
+"MAJAX searchterm" goes into the <tt>title</tt> attribute.</br>
+"MAJAX class" goes into the <tt>class</tt> attribute.  Order matters.</br>
+"MAJAX output" is the output produced</br>
+</p>
+<table border="1" cellpadding="5px" >
+<tr>
+<th>MAJAX searchterm</th>
+<th>MAJAX class</th>
+<th>MAJAX output</th>
+</tr>
+
+<tr>
+<td>.b2275560</td>
+<td>majax-showholdings</td>
+<td>
+    <span class="majax-showholdings" title=".b2275560"></span>
+</td>
+</tr>
+
+<tr>
+<td>.b2275560 (inlined)</td>
+<td>majax-showholdings majax-linktocatalog</td>
+<td>
+    <span class="majax-showholdings majax-linktocatalog" title=".b*" style="display: none">
+2275560
+</span>
+</td>
+</tr>
+
+<tr>
+<td>.b2150763</td>
+<td>majax-ebook majax-space majax-showholdings</td>
+<td>
+    <span class="majax-ebook majax-space majax-showholdings-brief" title=".b2150763"></span>
+</td>
+</tr>
+
+<tr>
+<td>oocm61881193</td>
+<td>majax-harvard-reference majax-newline majax-showholdings</td>
+<td>
+    <span class="majax-harvard-reference majax-newline majax-showholdings-brief" title="oocm61881193"></span>
+</td>
+
+<tr>
+<td>oocm61881193(inlined)</td>
+<td>majax-harvard-reference majax-newline majax-showholdingslocations</td>
+<td>
+    <span class="majax-harvard-reference majax-newline majax-showholdingslocations" title="o*">ocm61881193</span>
+</td>
+
+<tr>
+<td>1412936381 (pbk.)</td>
+<td>majax-marc-856-u majax-space majax-showholdings-brief</td>
+<td><span class="majax-marc-856-u majax-space majax-showholdings-brief" title="i*">
+1412936373 (cloth)
+</span>
+</td>
+</tr>
+
+<tr>
+<td>.b2275560</td>
+<td>majax-marc-856-u majax-space majax-showholdings-brief</td>
+<td><span class="majax-marc-856-u majax-space majax-showholdings-brief" title=".b2275560"></span>
+</td>
+</tr>
+
+
+<tr>
+<td>i1412936373</td>
+<td>majax-showholdings-brief majax-newline majax-marc-856-u majax-newline majax-ebook</td>
+<td><span class="majax-showholdings-brief majax-newline majax-marc-856-u majax-newline majax-ebook" title="i1412936373"></span>
+</td>
+</tr>
+
+<tr>
+<td>empty span with i* (inlined)</td>
+<td>majax-showholdings-brief majax-newline majax-marc-856-u majax-newline majax-ebook</td>
+<td><span class="majax-showholdings-brief majax-newline majax-marc-856-u majax-newline majax-ebook" title="i*"></span>
+(should stay empty since the span was not well-formed.)
+</td>
+</tr>
+
+<tr>
+<td>i0131429388</td>
+<td>majax-harvard-reference majax-showholdings-div</td>
+<td><span class="majax-harvard-reference majax-showholdings-div" title="i0131429388"></span></td>
+</tr>
+
+<tr>
+<td>i0131429388</td>
+<td>majax-showholdings-div majax-harvard-reference</td>
+<td><span class="majax-showholdings-div majax-harvard-reference" title="i0131429388"></span></td>
+</tr>
+
+<tr>
+<td>i0131429388 (inlined)</td>
+<td>majax-showholdings-div majax-harvard-reference</td>
+<td><span class="majax-showholdings-div majax-harvard-reference" title="i*">
+0131429388</span></td>
+</tr>
+
+<tr>
+<td>i0585202648</td>
+<td>majax-marc-856-u</td>
+<td><span class="majax-marc-856-u" title="i0585202648"></span></td>
+</tr>
+
+<tr>
+<td>i0585202648</td>
+<td>majax-ebook</td>
+<td><span class="majax-ebook" title="i0585202648"></span></td>
+</tr>
+
+<tr>
+<td>i0585202648</td>
+<td>majax-showholdings</td>
+<td><span class="majax-showholdings" title="i0585202648"></span> (should stay empty since we dont show a "No copies" message is we believe it's an electronic book.)</td>
+</tr>
+
+<tr>
+<td>i0743226712</td>
+<td>boldred majax-showholdings-div</td>
+<td><span class="boldred majax-showholdings-div" title="i0743226712"></span></td>
+</tr>
+
+<tr>
+<td>i0743226712</td>
+<td>majax-harvard-reference majax-endnote-switch</td>
+<td><span class="majax-harvard-reference majax-endnote-switch" title="i0743226712"></span></td>
+</tr>
+
+<tr>
+<td>tfreakonomics</td>
+<td>majax-showholdings majax-linktocatalog</td>
+<td><span class="majax-showholdings majax-linktocatalog" title="tfreakonomics"></span></td>
+</tr>
+
+<tr>
+<td>i0393020223</td>
+<td>majax-linktocatalog majax-harvard-reference</td>
+<td><span class="majax-linktocatalog majax-harvard-reference" title="i0393020223"></span></td>
+</tr>
+
+<tr>
+<td>i0912627646</td>
+<td>majax-showholdings</td>
+<td><span class="majax-showholdings" title="i0912627646"></span></td>
+</tr>
+
+<tr>
+<td>.b000000</td>
+<td>majax-showholdings majax-reportfailure</td>
+<td><span class="majax-showholdings majax-reportfailure" title=".b000000"></span></td>
+</tr>
+
+<tr>
+<td>tabcdefghjikl</td>
+<td>majax-showholdings majax-reportfailure</td>
+<td><span class="majax-showholdings majax-reportfailure" title="tabcdefghjikl"></span></td>
+</tr>
+
+<tr>
+<td>i9876543210</td>
+<td>majax-showholdings majax-reportfailure</td>
+<td><span class="majax-showholdings majax-reportfailure" title="i9876543210"></span></td>
+</tr>
+
+<tr>
+<td>i00368075</td>
+<td>majax-showholdings majax-harvard-reference</td>
+<td><span class="majax-showholdings majax-harvard-reference" title="i00368075"></span></td>
+</tr>
+
+<tr>
+<td>i0585202648</td>
+<td>majax-showholdings</td>
+<td><span class="majax-showholdings" title="i0585202648"></span></td>
+</tr>
+
+<tr>
+<td>i006073132X</td>
+<td>majax-showholdings</td>
+<td><span class="majax-showholdings" title="i006073132X"></span></td>
+</tr>
+
+<tr>
+<td>i006073132X</td>
+<td>majax-marc-050-a majax-marc-050-b</td>
+<td><span class="majax-marc-050-a majax-marc-050-b" title="i006073132X"></span></td>
+</tr>
+
+<tr>
+<td>i006073132X</td>
+<td>majax-marc-245</td>
+<td><span class="majax-marc-245" title="i006073132X"></span></td>
+</tr>
+
+<tr>
+<tr>
+<td>i006073132X</td>
+<td>majax-marc-020-a</td>
+<td><span class="majax-marc-020-a" title="i006073132X"></span></td>
+</tr>
+
+<tr>
+<td>i006073132X</td>
+<td>majax-endnote</td>
+<td><span class="majax-endnote" title="i006073132X"></span></td>
+</tr>
+
+<tr>
+<td>i006073132X</td>
+<td>majax-syndetics-yourclientid</td>
+<td><span class="majax-syndetics-vtech" title="i006073132X"></span>
+</td>
+</tr>
+
+<tr>
+<td>.b2150763</td>
+<td>majax-syndetics-vtech</td>
+<td>
+    <span class="majax-syndetics-vtech" title=".b2150763"></span>
+</td>
+</tr>
+
+<tr>
+<td>i006073132X</td>
+<td>showitalic majax-endnote-switch</td>
+<td><span class="showitalic majax-endnote-switch" title="i006073132X"></span></td>
+</tr>
+
+<tr>
+<td>i006073132X</td>
+<td>majax-endnote-import</td>
+<td><span class="majax-endnote-import" title="i006073132X"></span></td>
+</tr>
+
+</table>
+
+<hr />
+<p>
+
+</body>
+</html>
