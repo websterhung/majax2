@@ -1,9 +1,8 @@
 Options +ExecCGI
 
-# taken from http://webpy.infogami.com/install
 <IfModule mod_rewrite.c>
   RewriteEngine on
-  RewriteBase /services/majax2/
+  #RewriteBase /services/majax2/
   RewriteRule ^((isbn|oclc|bibrecord|title)/.*)$ majax2.py/$1 [PT]
 </IfModule>
 
