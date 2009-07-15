@@ -92,7 +92,9 @@ def validateIII(marc, sterm):
 
         term = sterm[1:].lower()
         if sterm.startswith('i'):
-            return OrList([ f['sf']['a'][0].lower().startswith(term) \
+            return OrList([  f['sf'].has_key('a') and f['sf']['a'][0].lower().startswith(term) \
+                            for f in marc['020']]) \
+                or OrList([  f['sf'].has_key('z') and f['sf']['z'][0].lower().startswith(term) \
                             for f in marc['020']]) \
                 or OrList([ f['sf']['a'][0].lower().replace("-", "").startswith(term) \
                             for f in marc['022']])
@@ -105,6 +107,8 @@ def validateIII(marc, sterm):
 
         return False
     except KeyError:
+        return False
+    except IndexError:
         return False
 
 def fetch(sterm, params):

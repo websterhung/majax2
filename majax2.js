@@ -28,19 +28,19 @@
  * with entries for all message you wish to customize.
  */
 
-(function () {
+(function (majax2ServiceUrl, majax2OpacBase) {
 
 /* 
  * URL to the MAJAX2 proxy.
  */
 if (!majax2ServiceUrl)
-    var majax2ServiceUrl = "http://libx.lib.vt.edu/services/majax2/";
+    majax2ServiceUrl = "http://libx.lib.vt.edu/services/majax2/";
 
 /* 
  * III OpacBase.
  */
 if (!majax2OpacBase)
-    var majax2OpacBase = "http://addison.vt.edu/search";
+    majax2OpacBase = "http://addison.vt.edu/search";
 
 /*****************************************************************/
 /* A regular expression that is matched against a status to determine if
@@ -678,7 +678,7 @@ function majaxSearch(sterm, majaxRequest)
     }
 
     var url = majax2ServiceUrl + path;
-    url += "?opacbase = " + encodeURIComponent(majax2OpacBase);
+    url += "?opacbase=" + encodeURIComponent(majax2OpacBase);
     url += "&jsoncallback=majax.processResults";
 
     if (majax.debug) {
@@ -976,5 +976,5 @@ function asJSON(data)
         return data;
 }
 
-})();
+})(majax2ServiceUrl, majax2OpacBase);
 
