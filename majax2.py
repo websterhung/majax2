@@ -30,7 +30,9 @@ from django.utils import simplejson
 
 defaultopacbase = "http://addison.vt.edu/search"
 
-def makeIIISearch(opacbase, sterm):
+def makeIIISearch(opacbase, sterm, allitems=False):
+    if allitems == True:
+    	 return opacbase + "/" + sterm + "/" + sterm + "/1,1,1,B/holdings&FF=" + sterm
     return opacbase + "/" + sterm + "/" + sterm + "/1,1,1,E/marc&FF=" + sterm
 
 #
@@ -79,6 +81,22 @@ def parseIII(response):
         # traceback.print_exc()
         pass
 
+def parseIIIallitems(response):
+    """
+        Scrapes the III view additional items page to retreive full item information.
+    """
+    def clean(s):
+        return nbsp.sub(" ", htmltags.sub("", s)).strip()
+        
+    try:
+        return {
+            'locations': [ clean(l.group(1)) for l in locationsformat.finditer(response) ],
+            'holdings': [ clean(h.group(1)) for h in holdingsformat.finditer(response) ]
+        }
+
+    except:
+        pass
+    
 def validateIII(marc, sterm):
     def OrList(list):
         return reduce(lambda x, y: x or y, list, False)
@@ -121,6 +139,17 @@ def fetch(sterm, params):
     recordurl = makeIIISearch(opacbase, sterm)
     iiiresponse = urllib.urlopen(recordurl).read()
     marc = parseIII(iiiresponse)
+    
+    if params.has_key('allitems'):
+	   if params.get('allitems') == 'true':
+		  bibrecordurl = recordurl
+		  recordurl = makeIIISearch(opacbase, sterm, allitems=True)
+		  iiiresponse = urllib.urlopen(recordurl).read()
+		  allitems = parseIIIallitems(iiiresponse)
+		  recordurl = [bibrecordurl, recordurl]
+		  marc['locations'] = allitems['locations']
+		  marc['holdings'] = allitems['holdings']
+    
     marcrecords = [ ]
     if marc and validateIII(marc['marc'], sterm):
         marcrecords.append(marc)
