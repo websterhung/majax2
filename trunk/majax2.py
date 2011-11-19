@@ -26,7 +26,9 @@ if script_dir not in sys.path:
 
 import re, urllib, traceback
 from collections import defaultdict
-from django.utils import simplejson
+# older versions of Python
+# from django.utils import simplejson
+import simplejson
 
 defaultopacbase = "http://addison.vt.edu/search"
 
@@ -177,6 +179,9 @@ def notfound(env, start_response):
 
 pathinfoformat = re.compile('/([^/]*)/(.*)')
 
+#
+# Callable 'application' is the WSGI entry point
+#
 def application(env, start_response):
     params = dict([(urllib.unquote_plus(k), urllib.unquote_plus(v))
         for k, v in [kv.strip().split('=', 1) \
@@ -197,6 +202,8 @@ def application(env, start_response):
         body = simplejson.dumps(results)
         if params.has_key('jsoncallback'):
             body = params.get('jsoncallback') + "(" + body + ")"
+        if params.has_key('callback'):
+            body = params.get('callback') + "(" + body + ")"
 
         headers = [('Content-Type', 'application/javascript;charset=utf-8'), \
                    ('Cache-Control', 'max-age=1,must-revalidate')]
