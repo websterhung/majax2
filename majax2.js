@@ -674,7 +674,7 @@ function majaxSearch(sterm, majaxRequest)
         case "i": var path = "isbn/" + sterm.substring(1); break;
         case "t": var path = "title/" + sterm.substring(1); break;
         case ".": var path = "bibrecord/" + sterm.substring(2); break;
-        default: break;
+        default: return false;
     }
 
     var url = majax2ServiceUrl + path;

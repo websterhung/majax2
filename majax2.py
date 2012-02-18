@@ -199,7 +199,7 @@ def application(env, start_response):
 
     if prefix.has_key(type):
         results = fetch(prefix[type] + id, params);
-        body = simplejson.dumps(results)
+        body = simplejson.dumps(results, encoding="iso8859-1")
         if params.has_key('jsoncallback'):
             body = params.get('jsoncallback') + "(" + body + ")"
         if params.has_key('callback'):
@@ -212,6 +212,15 @@ def application(env, start_response):
     
     return notfound(env, start_response)
 
+from itertools import tee, izip
+def pairwise(iterable):
+    "s -> (s0,s1), (s1,s2), (s2, s3), ..."
+    a, b = tee(iterable)
+    next(b, None)
+    return izip(a, b)
+
 if __name__ == '__main__':
-    marc = fetch(sys.argv[1], { })
-    print simplejson.dumps(marc)
+    marc = fetch(sys.argv[1], dict(pairwise(sys.argv[2:])))
+    # III appears to use charset='ISO8859' in its response; example:
+    # http://library.bu.edu/record=b1008487~S0
+    print simplejson.dumps(marc, encoding="iso8859-1")
